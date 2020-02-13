@@ -1,0 +1,3 @@
+﻿  alfa-build.cpp
+d:\univer\diplom\alfa-build\alfa-build\alfa-build.cpp(12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+  alfa-build.vcxproj -> D:\univer\diplom\alfa-build\Debug\alfa-build.exe
