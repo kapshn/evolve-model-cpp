@@ -10,7 +10,7 @@
 int main()
 {
 	srand(time(0));
-	Plot game(3);
+	Plot game(7);
 	game.nextGen();
 }
 

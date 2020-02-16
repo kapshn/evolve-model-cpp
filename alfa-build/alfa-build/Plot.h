@@ -1,8 +1,8 @@
 #pragma once
 #include"fieldCell.h"
 #include "Prey.h"
-#define spaceX 20
-#define spaceY 20
+#define spaceX 30
+#define spaceY 60
 
 class Plot
 {

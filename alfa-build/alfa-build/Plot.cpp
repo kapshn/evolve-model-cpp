@@ -2,6 +2,7 @@
 #include "Plot.h"
 #include <iostream>
 #include "ConsoleColor.h"
+//#include <Windows.h>
 
 using namespace std;
 
@@ -39,6 +40,7 @@ void Plot::plotGrow()
 
 void Plot::printPlot()
 {
+	system("cls");
 	refreshPlotPrey();
 	for (int i = 0; i < spaceX; i++)
 	{
@@ -79,7 +81,7 @@ void Plot::pathFind(int currPrey)
 {
 	refreshPlotPrey();
 
-	preys[currPrey].getHungry(1);
+
 
 	int maxHungry = hS;
 	maxHungry = (int)(0.8*maxHungry);
@@ -132,6 +134,11 @@ void Plot::pathFind(int currPrey)
 	}
 	if ((preys[currPrey].getState() != 0) && (preys[currPrey].getState() >= (maxHungry))) createOffspring(currPrey);
 
+	preys[currPrey].getHungry(1);
+	deleteDeadPrey(currPrey);
+
+
+
 }
 
 void Plot::refreshPlotPrey()
@@ -140,10 +147,6 @@ void Plot::refreshPlotPrey()
 		for (int j = 0; j < spaceY; j++) {
 			plotPrey[i][j] = -1;
 		}
-	}
-	for (int i = 0; i < preyCount; i++)
-	{
-		deleteDeadPrey(i);
 	}
 	for (int i = 0; i < preyCount; i++)
 	{
@@ -160,8 +163,8 @@ void Plot::createOffspring(int currPrey)
 	int nearPreyX = spaceX;
 	int nearPreyY = spaceY;
 	int preyPartner = -1;
-	for (int i = 0; i <= spaceX; i++) {
-		for (int j = 0; j <= spaceY; j++) {
+	for (int i = 0; i < spaceX; i++) {
+		for (int j = 0; j < spaceY; j++) {
 			if ((plotPrey[i][j] > -1)&& (plotPrey[i][j] != currPrey) && (abs(nearPreyX) + abs(nearPreyY) > abs(preyPosX - i) + abs(preyPosY - j))) {
 				nearPreyX = preyPosX - i;
 				nearPreyY = preyPosY - j;
@@ -187,12 +190,25 @@ void Plot::createOffspring(int currPrey)
 				preys[i] = tmpPreys[i];
 			}
 			delete[] tmpPreys;
-			if (preyPosX < spaceX && plotPrey[preyPosX + 1][preyPosY] == -1) preys[preyCount - 1].move(preyPosX + 1, preyPosY);
-			if (preyPosY < spaceY && plotPrey[preyPosX][preyPosY + 1] == -1) preys[preyCount - 1].move(preyPosX, preyPosY + 1);
+			if (preyPosX < spaceX && plotPrey[preyPosX + 1][preyPosY] == -1) {
+				preys[preyCount - 1].move(preyPosX + 1, preyPosY);
+			}
+			else
+			{
+				if (preyPosX > 0 && plotPrey[preyPosX - 1][preyPosY] == -1) preys[preyCount - 1].move(preyPosX - 1, preyPosY);
+			}
+			if (preyPosY < spaceY && plotPrey[preyPosX][preyPosY + 1] == -1) {
+				preys[preyCount - 1].move(preyPosX, preyPosY + 1);
+			}
+			else
+			{
+				if (preyPosY > 0 && plotPrey[preyPosX][preyPosY - 1] == -1) preys[preyCount - 1].move(preyPosX, preyPosY - 1);
+			}
 			halfHungry = hS;
 			halfHungry = (int)(0.3*halfHungry);
 			preys[currPrey].getHungry(halfHungry);
 			preys[preyPartner].getHungry(halfHungry);
+			preys[preyCount - 1].getHungry(halfHungry);
 		}
 	}
 }
@@ -246,8 +262,9 @@ void Plot::nextGen()
 		{
 			pathFind(i);
 		}
-		system("cls");
 		printPlot();
-		cin.get();
+		Sleep(10);
+		//cin.get();
+	
 	}
 }
